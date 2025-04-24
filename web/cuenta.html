@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuenta - Safe Data</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/scripts.js"></script>
+    <link rel="icon" href="img/perfil-favicon.png" type="image/x-icon">
+    <style>
+        .form-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>SAFE DATA</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">INICIO</a></li>
+                    <li><a href="/servicios">SERVICIOS</a></li>
+                    <li><a href="/cloud">CLOUD</a></li>
+                    <li><a href="/contacto">CONTACTO</a></li>
+                    <li><a href="/cuenta">CUENTA</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="account container">
+        <div class="account-section">
+            <div id="register-message" class="form-message hidden"></div>
+            <div id="login-message" class="form-message hidden"></div>
+
+            <div class="account-form">
+                <h2>Registrarse</h2>
+                <form id="register-form">
+                    <label for="username">Nombre de usuario</label>
+                    <input type="text" id="username" name="username" required>
+
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" required>
+                    <div id="password-strength"></div>
+
+                    <button type="submit">Registrarse</button>
+                </form>
+            </div>
+
+            <div class="account-form">
+                <h2>Iniciar sesión</h2>
+                <form id="login-form">
+                    <label for="login-username">Nombre de usuario</label>
+                    <input type="text" id="login-username" name="login-username" required>
+
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" name="login-password" required>
+
+                    <button type="submit">Iniciar sesión</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Safe Data. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Manejo del formulario de registro
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const message = document.getElementById('register-message');
+
+            try {
+                const formData = new FormData(form);
+                const response = await fetch('http://localhost:9090/api/register', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    message.textContent = 'Registro exitoso!';
+                    message.className = 'form-message success';
+                    message.classList.remove('hidden');
+                    form.reset();
+                } else {
+                    throw new Error(result.error || 'Error en el registro');
+                }
+            } catch (error) {
+                message.textContent = error.message;
+                message.className = 'form-message error';
+                message.classList.remove('hidden');
+            }
+        });
+
+        // Manejo del formulario de login
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const message = document.getElementById('login-message');
+
+            try {
+                const formData = new FormData(form);
+                const response = await fetch('http://localhost:9090/api/login', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else {
+                    const result = await response.json();
+                    if (response.ok) {
+                        message.textContent = 'Inicio de sesión exitoso!';
+                        message.className = 'form-message success';
+                        message.classList.remove('hidden');
+                    } else {
+                        throw new Error(result.error || 'Error en el inicio de sesión');
+                    }
+                }
+            } catch (error) {
+                message.textContent = error.message;
+                message.className = 'form-message error';
+                message.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,474 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 0;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: greenyellow;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li {
+    margin-left: 1rem;
+    color: greenyellow;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    color: greenyellow;
+}
+
+.hero {
+    background: url('hero-bg.jpg') no-repeat center center/cover;
+    color: #fff;
+    padding: 5rem 0;
+    text-align: center;
+    flex: 1;
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: black;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: black;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-image {
+    max-width: 60%;
+    height: auto;
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: greenyellow;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.btn:hover {
+    background-color: grey;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+section {
+    padding: 4rem 0;
+}
+
+/* Slider styles */
+.slider {
+    position: relative;
+    max-width: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.slider img {
+    width: 100%;
+    height: 400px; /* Tamaño fijo para todas las imágenes */
+    object-fit: cover; /* Asegura que las imágenes cubran el contenedor */
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+}
+
+.dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+    background-color: #717171;
+}
+
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 0.8s; /* Transición más rápida: 0.8 segundos */
+    animation-name: fade;
+    animation-duration: 0.8s; /* Transición más rápida: 0.8 segundos */
+}
+
+@-webkit-keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+
+@keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+
+.swiper-container {
+    width: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.swiper-slide {
+    background-color: #fff;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 300px; /* Ancho fijo para cada slide */
+    margin: 10px; /* Margen entre slides */
+    height: auto; /* Altura automática para adaptarse al contenido */
+}
+
+.swiper-slide img {
+    max-width: 80%; /* Tamaño máximo de la imagen dentro del slide */
+    height: auto;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+}
+
+.swiper-pagination-bullet {
+    background: greenyellow;
+}
+
+.swiper-button-next, .swiper-button-prev {
+    color: greenyellow;
+    top: 50%; /* Ajusta la posición vertical de los botones */
+    transform: translateY(-50%); /* Centra verticalmente los botones */
+}
+
+/* Media query para hacerlo responsivo */
+@media (min-width: 768px) { /* Ejemplo: a partir de pantallas medianas */
+    .swiper-container {
+        width: 100%; /* Opcional: Ajusta el ancho del contenedor en pantallas más grandes */
+    }
+
+    .swiper-slide {
+        width: 30%; /* Ocupa un tercio del ancho en pantallas medianas o mayores */
+        margin: 10px; /* Ajusta el margen si es necesario */
+    }
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin-top: 1rem;
+}
+
+form input, form textarea {
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    padding: 0.75rem;
+    margin-top: 1rem;
+    background-color: greenyellow;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: grey;
+}
+
+/* Contact section styles */
+.contact {
+    background-color: #fff;
+    padding: 4rem 0;
+}
+
+.contact h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.contact .contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.contact .contact-form label {
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+.contact .contact-form input, .contact .contact-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.contact .contact-form button {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1rem;
+    background-color: greenyellow;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.contact .contact-form button:hover {
+    background-color: grey;
+}
+
+/* Testimonials section styles */
+.testimonials {
+    background-color: #f8f8f8;
+    padding: 2rem 0;
+    text-align: center;
+    border-top: 1px solid #e5e5e5;
+    margin-top: -1rem;
+}
+
+.testimonials h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.testimonial-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.testimonial-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.testimonial-item blockquote {
+    font-style: italic;
+    color: #555;
+}
+
+.testimonial-item blockquote p {
+    margin: 0;
+}
+
+.testimonial-item footer {
+    margin-top: 1rem;
+    color: greenyellow;
+    font-weight: bold;
+}
+
+/* Account section styles */
+.account-section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items at the top */
+    gap: 2rem;
+    padding: 4rem 0;
+    background-color: #fff;
+}
+
+.account-form {
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Ensure both forms have the same width */
+}
+
+.account-form h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.account-form label {
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+.account-form input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.account-form button {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1rem;
+    background-color: greenyellow;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.account-form button:hover {
+    background-color: grey;
+}
+
+/* Footer styles */
+footer {
+    background-color: #333;
+    color: greenyellow;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: auto;
+}
+
+.cloud {
+    background-color: #F5F5F5;
+    padding: 4rem 0;
+    text-align: center;
+    border-top: 1px solid #e5e5e5;
+}
+
+.cloud h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.cloud p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+.cloud-content { /* Nuevo contenedor para la imagen y el botón */
+    display: flex;
+    flex-direction: column; /* Coloca la imagen y el botón en columna */
+    align-items: center; /* Centra la imagen y el botón horizontalmente */
+}
+
+.cloud-image {
+    max-width: 80%;
+    height: auto;
+    margin-bottom: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cloud .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: greenyellow;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    display: inline-block;
+    margin-top: 1rem; /* Espacio entre la imagen y el botón */
+}
+
+.cloud .btn:hover {
+    background-color: grey;
+}

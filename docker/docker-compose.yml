@@ -1,0 +1,181 @@
+services:
+  db:
+    image: mariadb:10.11
+    container_name: mysql_server
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: lucastfg
+      MYSQL_DATABASE: safedata
+      MYSQL_USER: lucas
+      MYSQL_PASSWORD: lucastfg
+    volumes:
+      - ../volumes/db_data:/var/lib/mysql
+    ports:
+      - "3308:3306"
+    networks:
+      - safe-network
+
+  redis:
+    image: redis:7
+    container_name: redis_server
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - safe-network
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    container_name: phpmyadmin_server
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: mysql_server
+      PMA_USER: lucas
+      PMA_PASSWORD: lucastfg
+    ports:
+      - "8083:80"
+    networks:
+      - safe-network
+
+  nextcloud:
+    image: nextcloud:latest
+    container_name: nextcloud_server
+    restart: always
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: mysql_server
+      MYSQL_DATABASE: safedata
+      MYSQL_USER: lucas
+      MYSQL_PASSWORD: lucastfg
+    volumes:
+      - ../volumes/nextcloud_data:/var/www/html
+    ports:
+      - "8084:80"
+    networks:
+      - safe-network
+
+  juice_shop:
+    image: bkimminich/juice-shop
+    container_name: juice_shop
+    restart: always
+    ports:
+      - "7001:3000"
+    networks:
+      - safe-network
+
+  cyberchef:
+    image: mpepping/cyberchef
+    container_name: cyberchef
+    restart: always
+    ports:
+      - "7002:8000"
+    networks:
+      - safe-network
+
+  apache_web:
+    image: httpd:2.4
+    container_name: apache_web
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ../web:/usr/local/apache2/htdocs/
+    networks:
+      - safe-network
+
+  fastapi_app:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    container_name: fastapi_app
+    restart: always
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ../web:/web
+    expose:
+      - "9090"
+    networks:
+      - safe-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_proxy
+    restart: always
+    depends_on:
+      - fastapi_app
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - safe-network
+
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    restart: always
+    ports:
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ../volumes/portainer_data:/data
+    networks:
+      - safe-network
+
+  backup_manager:
+    image: alpine
+    container_name: backup_manager
+    restart: "no"
+    volumes:
+      - ../volumes/db_data:/source/db_data:ro
+      - ../volumes/nextcloud_data:/source/nextcloud_data:ro
+      - ../volumes/backups:/backups
+    entrypoint: >
+      sh -c "tar -czf /backups/backup-$(date +%F-%T).tar.gz -C /source . &&
+             echo '✅ Backup creado al iniciar el entorno.'"
+    networks:
+      - safe-network
+
+  clamav:
+    image: clamav/clamav:latest
+    container_name: clamav
+    user: root
+    restart: always
+    volumes:
+      - ../volumes/nextcloud_data:/scan:ro
+      - ../volumes/clamav_logs:/clamav_logs
+    command: >
+      sh -c "mkdir -p /clamav_logs &&
+             freshclam --stdout &&
+             echo '0 * * * * clamscan -r /scan --log=/clamav_logs/scan.log' > /etc/crontabs/root &&
+             crond -f -L /dev/stdout"
+    networks:
+      - safe-network
+
+  clamav_scanner:
+    image: clamav/clamav:latest
+    container_name: clamav_scanner
+    user: root
+    volumes:
+      - ../volumes/nextcloud_data:/scan:ro
+      - ../volumes/clamav_logs:/clamav_logs
+    entrypoint: ["clamscan", "-r", "/scan", "--log=/clamav_logs/scan.log"]
+    networks:
+      - safe-network
+    restart: "no"
+
+volumes:
+  db_data:
+  nextcloud_data:
+  portainer_data:
+  backups:
+  clamav_logs:
+
+networks:
+  safe-network:
+    driver: bridge

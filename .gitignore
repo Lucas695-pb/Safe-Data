@@ -1,0 +1,33 @@
+# Archivos de entorno
+*.env
+config/.env
+
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+*.log
+
+# Archivos innecesarios de sistema
+.DS_Store
+
+# Volúmenes y backups
+volumes/
+*.tar.gz
+*.bak
+*.sql
+*.sqlite
+*.db
+
+# Claves y certificados (si algún día los usas)
+*.pem
+*.key
+
+# Directorios a no subir (ajustado a tu proyecto)
+# No ignores docker/web porque ahí tienes tu frontend
+# No ignores docker/nextcloud si no tienes nada importante ahí
+# No ignores scripts/ si los usas
+
+# Evitar archivos compilados o generados automáticamente
+node_modules/
+dist/
+build/
