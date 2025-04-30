@@ -3,6 +3,17 @@ from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import mysql.connector
+from dotenv import load_dotenv
+import os
+
+# Cargar variables del .env
+load_dotenv()
+
+DB_HOST = os.getenv("DB_HOST", "mysql_server")
+DB_PORT = int(os.getenv("DB_PORT", 3306))
+DB_USER = os.getenv("MYSQL_USER")
+DB_PASSWORD = os.getenv("MYSQL_PASSWORD")
+DB_NAME = os.getenv("MYSQL_DATABASE")
 
 app = FastAPI()
 
@@ -10,7 +21,7 @@ app = FastAPI()
 BASE_DIR = Path(__file__).resolve().parent.parent
 WEB_DIR = BASE_DIR / "web"
 
-# Montaje de rutas estáticas según tu estructura
+# Montaje de rutas estáticas
 app.mount("/css", StaticFiles(directory=WEB_DIR / "css"), name="css")
 app.mount("/js", StaticFiles(directory=WEB_DIR / "js"), name="js")
 app.mount("/img", StaticFiles(directory=WEB_DIR / "img"), name="img")
@@ -40,11 +51,11 @@ async def cloud():
 async def contacto_post(nombre: str = Form(...), email: str = Form(...), mensaje: str = Form(...)):
     try:
         db = mysql.connector.connect(
-            host="mysql_server",
-            port=3306,
-            user="lucas",
-            password="lucastfg",
-            database="safedata"
+            host=DB_HOST,
+            port=DB_PORT,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
         )
         cursor = db.cursor()
         cursor.execute("INSERT INTO contacto (nombre, email, mensaje) VALUES (%s, %s, %s)", (nombre, email, mensaje))
@@ -62,11 +73,11 @@ async def contacto_post(nombre: str = Form(...), email: str = Form(...), mensaje
 async def register(username: str = Form(...), email: str = Form(...), password: str = Form(...)):
     try:
         db = mysql.connector.connect(
-            host="mysql_server",
-            port=3306,
-            user="lucas",
-            password="lucastfg",
-            database="safedata"
+            host=DB_HOST,
+            port=DB_PORT,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
         )
         cursor = db.cursor()
         cursor.execute("INSERT INTO usuarios (username, email, password) VALUES (%s, %s, %s)", (username, email, password))
@@ -86,9 +97,9 @@ async def login(login_username: str = Form(...), login_password: str = Form(...)
         db = mysql.connector.connect(
             host="127.0.0.1",
             port=3308,
-            user="lucas",
-            password="lucastfg",
-            database="safedata"
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
         )
         cursor = db.cursor()
         cursor.execute("SELECT * FROM usuarios WHERE username=%s AND password=%s", (login_username, login_password))
