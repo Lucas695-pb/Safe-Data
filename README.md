@@ -4,19 +4,20 @@ Este proyecto despliega un entorno de servicios Docker orientado a la gestión d
 
 ## 🔧 Servicios Incluidos
 
-- **Nextcloud**: Plataforma de almacenamiento en la nube.
-- **MariaDB**: Base de datos relacional usada por los servicios web.
-- **phpMyAdmin**: Interfaz gráfica para administrar bases de datos.
-- **Aplicación Web**: Frontend HTML con backend FastAPI.
-- **FastAPI (Python)**: API REST ligera para login, registro y formularios.
-- **CyberChef**: Herramienta web de análisis forense y decodificación.
-- **OWASP Juice Shop**: Aplicación vulnerable para prácticas de hacking ético.
-- **Redis**: Sistema de almacenamiento en memoria utilizado por el backend.
-- **Apache HTTP Server**: Servidor para servir el frontend web estático.
-- **Nginx**: Proxy reverso para enrutar peticiones a FastAPI.
-- **Portainer**: Interfaz gráfica para gestión de contenedores Docker.
-- **Backup Manager**: Realiza copias de seguridad automáticas de datos y base de datos.
-- **ClamAV**: Escáner antivirus para los archivos de Nextcloud.
+- 📦 **Nextcloud**: Plataforma de almacenamiento en la nube.
+- 🐬 **MariaDB**: Base de datos relacional para usuarios, mensajes y eventos.
+- 🧮 **phpMyAdmin**: Interfaz gráfica para gestionar la base de datos.
+- 🌐 **Frontend Web**: Interfaz en HTML/CSS/JS servida con Apache.
+- ⚙️ **FastAPI**: API REST para login, registro, formularios y eventos.
+- 🧠 **CyberChef**: Herramienta web para análisis forense y decodificación.
+- 🎯 **OWASP Juice Shop**: Aplicación vulnerable para prácticas de hacking ético.
+- 🚀 **Redis**: Cache y soporte de sesión en memoria.
+- 🔁 **Nginx**: Proxy reverso que enruta a la API.
+- 🖥️ **Apache HTTP Server**: Sirve el frontend HTML estático.
+- 🖼️ **Portainer**: Gestión visual avanzada de contenedores Docker.
+- ♻️ **Backup Manager**: Crea copias de seguridad al iniciar el entorno.
+- 🛡️ **ClamAV**: Escaneo antivirus periódico de archivos de Nextcloud.
+- 📊 **Registro de Eventos**: Almacena actividades clave como inicio de sesión..
 
 ## 📁 Estructura del Proyecto
 
