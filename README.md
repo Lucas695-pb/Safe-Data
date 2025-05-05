@@ -56,8 +56,9 @@ Esto desplegará todos los contenedores definidos, incluyendo base de datos, php
 
 ## 🛡️ Base de Datos
 
-- **Gestión de usuarios**: Registro e inicio de sesión desde la web.
-- **Formulario de contacto**: Almacena mensajes enviados por el usuario.
+- 👤 Registro e inicio de sesión desde la web.
+- ✉️ Formulario de contacto que almacena los mensajes.
+- 📋 Registro de eventos (login, intentos, etc).
 
 Estructura esperada:
 
@@ -74,6 +75,13 @@ CREATE TABLE usuarios (
   username VARCHAR(100),
   email VARCHAR(100),
   password VARCHAR(100)
+);
+
+CREATE TABLE eventos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  tipo_evento VARCHAR(50),
+  usuario VARCHAR(100),
+  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
@@ -97,14 +105,11 @@ Desde Kali Linux se puede interactuar con el entorno para realizar pruebas de ci
 - 🚨 **IDS/IPS**: Implementación de Snort o Suricata para detección de intrusos.
 - 🧾 **Auditorías**: Análisis del sistema con Lynis.
 
-## ⚙️ Variables Importantes
+## 📦 Variables y Seguridad
 
-Configuradas en el archivo `docker-compose.yml`:
+Las contraseñas y variables sensibles están almacenadas en .env, que no se sube al repositorio (.gitignore lo bloquea).
 
-- `MYSQL_ROOT_PASSWORD=lucastfg`
-- `MYSQL_DATABASE=safedata`
-- `MYSQL_USER=lucas`
-- `MYSQL_PASSWORD=lucastfg`
+Puedes usar .env.example para clonar el proyecto sin comprometer datos.
 
 ## 👨‍💻 Contribuir
 
