@@ -5,6 +5,7 @@ from pathlib import Path
 import mysql.connector
 from dotenv import load_dotenv
 import os
+from datetime import datetime
 
 # Cargar variables del .env
 load_dotenv()
@@ -15,13 +16,34 @@ DB_USER = os.getenv("MYSQL_USER")
 DB_PASSWORD = os.getenv("MYSQL_PASSWORD")
 DB_NAME = os.getenv("MYSQL_DATABASE")
 
+# Función auxiliar para registrar eventos
+def registrar_evento(evento: str, descripcion: str):
+    try:
+        db = mysql.connector.connect(
+            host=DB_HOST,
+            port=DB_PORT,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
+        )
+        cursor = db.cursor()
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        cursor.execute(
+            "INSERT INTO eventos (evento, descripcion, fecha_hora) VALUES (%s, %s, %s)",
+            (evento, descripcion, timestamp)
+        )
+        db.commit()
+        cursor.close()
+        db.close()
+    except Exception as e:
+        print("❌ Error registrando evento:", e)
+
 app = FastAPI()
 
 # Rutas
 BASE_DIR = Path(__file__).resolve().parent.parent
 WEB_DIR = BASE_DIR / "web"
 
-# Montaje de rutas estáticas
 app.mount("/css", StaticFiles(directory=WEB_DIR / "css"), name="css")
 app.mount("/js", StaticFiles(directory=WEB_DIR / "js"), name="js")
 app.mount("/img", StaticFiles(directory=WEB_DIR / "img"), name="img")
@@ -63,6 +85,7 @@ async def contacto_post(nombre: str = Form(...), email: str = Form(...), mensaje
         cursor.close()
         db.close()
         print("📩 Mensaje recibido:", nombre, email, mensaje)
+        registrar_evento("Contacto", f"Mensaje de {nombre} ({email})")
         return {"message": "Mensaje recibido con éxito"}
     except Exception as e:
         print("❌ Error en contacto:", e)
@@ -85,6 +108,7 @@ async def register(username: str = Form(...), email: str = Form(...), password: 
         cursor.close()
         db.close()
         print("✅ Registro:", username, email)
+        registrar_evento("Registro", f"Nuevo usuario registrado: {username}")
         return {"message": "Registro exitoso"}
     except Exception as e:
         print("❌ Error en registro:", e)
@@ -109,6 +133,7 @@ async def login(login_username: str = Form(...), login_password: str = Form(...)
 
         if user:
             print("🔐 Login:", login_username)
+            registrar_evento("Login", f"Inicio de sesión: {login_username}")
             return {"message": "Inicio de sesión exitoso"}
         else:
             return {"error": "Credenciales inválidas"}
