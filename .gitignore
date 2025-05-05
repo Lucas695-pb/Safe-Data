@@ -1,7 +1,10 @@
 # Archivos de entorno
 .env
-*.env
 config/.env
+
+# Archivos sensibles que no deben subirse
+scripts/database-connection
+config/config.php
 
 # Archivos temporales de Python
 __pycache__/
@@ -29,6 +32,6 @@ dist/
 build/
 
 # ⚠️ NO ignores estos porque los usas:
-# docker/web/    --> contiene tu frontend
-# docker/nextcloud/ --> usado por Nextcloud
-# scripts/       --> contiene lógica útil
+# docker/web/        --> contiene tu frontend
+# docker/nextcloud/  --> usado por Nextcloud
+# scripts/           --> contiene lógica útil

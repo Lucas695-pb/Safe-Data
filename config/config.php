@@ -1,11 +1,11 @@
 <?php
 $CONFIG = array(
     'dbtype' => 'mysql',
-    'dbname' => 'safedata',
-    'dbuser' => 'lucas',
-    'dbpassword' => 'lucastfg',
-    'dbhost' => 'db',
-    'dbport' => 3306,
+    'dbname' => getenv('DB_NAME'),
+    'dbuser' => getenv('DB_USER'),
+    'dbpassword' => getenv('DB_PASSWORD'),
+    'dbhost' => getenv('DB_HOST'),
+    'dbport' => getenv('DB_PORT'),
     'trusted_domains' => array(
         0 => 'localhost',
         1 => '127.0.0.1',
