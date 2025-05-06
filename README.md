@@ -1,6 +1,10 @@
 # Safe Data - Plataforma de Ciberseguridad y Almacenamiento
 
-Este proyecto despliega un entorno de servicios Docker orientado a la gestión de almacenamiento, servicios web y análisis de ciberseguridad.
+Este proyecto despliega un entorno completo basado en Docker que integra múltiples servicios orientados a la gestión de almacenamiento, operación de aplicaciones web y análisis de ciberseguridad.
+
+Gracias al uso de contenedores, cada componente del sistema se encuentra aislado, es fácilmente replicable y escalable. Incluye una plataforma cloud privada (Nextcloud), una API desarrollada en FastAPI para gestión de usuarios, formularios y seguridad, un sistema de base de datos relacional (MariaDB), y un panel de administración visual (phpMyAdmin y Portainer).
+
+Adicionalmente, incorpora herramientas avanzadas de análisis forense (CyberChef), pruebas de hacking ético (OWASP Juice Shop), escaneo antivirus automatizado (ClamAV) y backups programados, lo que lo convierte en un entorno versátil tanto para producción como para prácticas educativas, auditorías o pruebas en ciberseguridad. Todo ello está centralizado en una arquitectura coherente y controlada mediante un único archivo docker-compose.
 
 ## 🔧 Servicios Incluidos
 
