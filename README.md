@@ -26,6 +26,8 @@ Este proyecto despliega un entorno de servicios Docker orientado a la gestión d
 │
 ├── backend/              # Backend FastAPI (Python)
 ├── docker/               # Dockerfile y docker-compose.yml
+├── config/               # Directorio para ciertos archivos de configuración
+├── scripts/              # Archivos adicionales (verificar_entorno.sh, database-connection) 
 ├── volumes/              # Volúmenes persistentes (db, nextcloud, backups, clamav, portainer)
 ├── web/                  # Frontend web en HTML, CSS y JS
 └── README.md             # Este archivo
