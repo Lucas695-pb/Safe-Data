@@ -97,6 +97,8 @@ services:
       - redis
     volumes:
       - ../web:/web
+    env_file:
+      - ../docker/.env
     expose:
       - "9090"
     networks:

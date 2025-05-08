@@ -7,14 +7,16 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime
 
-# Cargar variables del .env
-load_dotenv()
+# Cargar variables del .env desde la carpeta docker
+dotenv_path = Path(__file__).resolve().parent.parent / "docker" / ".env"
+load_dotenv(dotenv_path=dotenv_path)
 
+# Variables de entorno corregidas (prioridad DB_* y fallback MYSQL_*)
 DB_HOST = os.getenv("DB_HOST", "mysql_server")
 DB_PORT = int(os.getenv("DB_PORT", 3306))
-DB_USER = os.getenv("MYSQL_USER")
-DB_PASSWORD = os.getenv("MYSQL_PASSWORD")
-DB_NAME = os.getenv("MYSQL_DATABASE")
+DB_USER = os.getenv("DB_USER") or os.getenv("MYSQL_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD") or os.getenv("MYSQL_PASSWORD")
+DB_NAME = os.getenv("DB_NAME") or os.getenv("MYSQL_DATABASE")
 
 # Función auxiliar para registrar eventos
 def registrar_evento(evento: str, descripcion: str):
@@ -119,8 +121,8 @@ async def register(username: str = Form(...), email: str = Form(...), password: 
 async def login(login_username: str = Form(...), login_password: str = Form(...)):
     try:
         db = mysql.connector.connect(
-            host="127.0.0.1",
-            port=3308,
+            host=DB_HOST,
+            port=DB_PORT,
             user=DB_USER,
             password=DB_PASSWORD,
             database=DB_NAME
@@ -128,14 +130,19 @@ async def login(login_username: str = Form(...), login_password: str = Form(...)
         cursor = db.cursor()
         cursor.execute("SELECT * FROM usuarios WHERE username=%s AND password=%s", (login_username, login_password))
         user = cursor.fetchone()
-        cursor.close()
-        db.close()
 
         if user:
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            cursor.execute("UPDATE usuarios SET ultimo_login=%s WHERE username=%s", (timestamp, login_username))
+            db.commit()
             print("🔐 Login:", login_username)
             registrar_evento("Login", f"Inicio de sesión: {login_username}")
+            cursor.close()
+            db.close()
             return {"message": "Inicio de sesión exitoso"}
         else:
+            cursor.close()
+            db.close()
             return {"error": "Credenciales inválidas"}
     except Exception as e:
         print("❌ Error en login:", e)

@@ -17,6 +17,16 @@
         .success { background-color: #d4edda; color: #155724; }
         .error { background-color: #f8d7da; color: #721c24; }
         .hidden { display: none; }
+        .notificacion {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .notificacion.no-leida {
+            background-color: #e9f7ef;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -61,15 +71,20 @@
                 <h2>Iniciar sesión</h2>
                 <form id="login-form">
                     <label for="login-username">Nombre de usuario</label>
-                    <input type="text" id="login-username" name="login-username" required>
+                    <input type="text" id="login-username" name="login_username" required>
 
                     <label for="login-password">Contraseña</label>
-                    <input type="password" id="login-password" name="login-password" required>
+                    <input type="password" id="login-password" name="login_password" required>
 
                     <button type="submit">Iniciar sesión</button>
                 </form>
             </div>
         </div>
+    </section>
+
+    <section class="container">
+        <h2>Notificaciones</h2>
+        <div id="notificaciones"></div>
     </section>
 
     <footer>
@@ -79,7 +94,6 @@
     </footer>
 
     <script>
-        // Manejo del formulario de registro
         document.getElementById('register-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const form = e.target;
@@ -109,7 +123,6 @@
             }
         });
 
-        // Manejo del formulario de login
         document.getElementById('login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const form = e.target;
@@ -122,17 +135,36 @@
                     body: formData
                 });
 
-                if (response.redirected) {
-                    window.location.href = response.url;
+                const result = await response.json();
+
+                if (response.ok) {
+                    message.textContent = 'Inicio de sesión exitoso!';
+                    message.className = 'form-message success';
+                    message.classList.remove('hidden');
+
+                    // Simulación de ID de usuario (realmente lo ideal es almacenarlo en localStorage/cookie)
+                    const usuarioId = 1;
+
+                    fetch(`http://localhost:9090/api/notificaciones/${usuarioId}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            const contenedor = document.getElementById("notificaciones");
+                            contenedor.innerHTML = "";
+
+                            if (!data.length) {
+                                contenedor.innerHTML = "<p>No tienes notificaciones</p>";
+                            } else {
+                                data.forEach(n => {
+                                    const div = document.createElement("div");
+                                    div.className = "notificacion";
+                                    if (!n.leido) div.classList.add("no-leida");
+                                    div.innerHTML = `<strong>${n.mensaje}</strong><br><small>${n.fecha}</small>`;
+                                    contenedor.appendChild(div);
+                                });
+                            }
+                        });
                 } else {
-                    const result = await response.json();
-                    if (response.ok) {
-                        message.textContent = 'Inicio de sesión exitoso!';
-                        message.className = 'form-message success';
-                        message.classList.remove('hidden');
-                    } else {
-                        throw new Error(result.error || 'Error en el inicio de sesión');
-                    }
+                    throw new Error(result.error || 'Error en el inicio de sesión');
                 }
             } catch (error) {
                 message.textContent = error.message;
