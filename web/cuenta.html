@@ -142,8 +142,7 @@
                     message.className = 'form-message success';
                     message.classList.remove('hidden');
 
-                    // Simulación de ID de usuario (realmente lo ideal es almacenarlo en localStorage/cookie)
-                    const usuarioId = 1;
+                    const usuarioId = result.usuario_id;
 
                     fetch(`http://localhost:9090/api/notificaciones/${usuarioId}`)
                         .then(res => res.json())

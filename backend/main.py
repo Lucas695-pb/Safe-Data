@@ -6,6 +6,7 @@ import mysql.connector
 from dotenv import load_dotenv
 import os
 from datetime import datetime
+from notificaciones import router as notificaciones_router
 
 # Cargar variables del .env desde la carpeta docker
 dotenv_path = Path(__file__).resolve().parent.parent / "docker" / ".env"
@@ -40,7 +41,29 @@ def registrar_evento(evento: str, descripcion: str):
     except Exception as e:
         print("❌ Error registrando evento:", e)
 
+# Función auxiliar para crear notificación
+def crear_notificacion(usuario_id: int, mensaje: str = "Tu información se ha guardado con éxito."):
+    try:
+        db = mysql.connector.connect(
+            host=DB_HOST,
+            port=DB_PORT,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
+        )
+        cursor = db.cursor()
+        cursor.execute(
+            "INSERT INTO notificaciones (usuario_id, mensaje, leido) VALUES (%s, %s, %s)",
+            (usuario_id, mensaje, False)
+        )
+        db.commit()
+        cursor.close()
+        db.close()
+    except Exception as e:
+        print("❌ Error creando notificación:", e)
+
 app = FastAPI()
+app.include_router(notificaciones_router)
 
 # Rutas
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -70,7 +93,6 @@ async def servicios():
 async def cloud():
     return FileResponse(WEB_DIR / "cloud.html")
 
-# API Contacto
 @app.post("/api/contacto")
 async def contacto_post(nombre: str = Form(...), email: str = Form(...), mensaje: str = Form(...)):
     try:
@@ -86,14 +108,11 @@ async def contacto_post(nombre: str = Form(...), email: str = Form(...), mensaje
         db.commit()
         cursor.close()
         db.close()
-        print("📩 Mensaje recibido:", nombre, email, mensaje)
         registrar_evento("Contacto", f"Mensaje de {nombre} ({email})")
         return {"message": "Mensaje recibido con éxito"}
     except Exception as e:
-        print("❌ Error en contacto:", e)
         return {"error": str(e)}
 
-# API Registro
 @app.post("/api/register")
 async def register(username: str = Form(...), email: str = Form(...), password: str = Form(...)):
     try:
@@ -106,17 +125,16 @@ async def register(username: str = Form(...), email: str = Form(...), password: 
         )
         cursor = db.cursor()
         cursor.execute("INSERT INTO usuarios (username, email, password) VALUES (%s, %s, %s)", (username, email, password))
+        usuario_id = cursor.lastrowid
         db.commit()
         cursor.close()
         db.close()
-        print("✅ Registro:", username, email)
         registrar_evento("Registro", f"Nuevo usuario registrado: {username}")
+        crear_notificacion(usuario_id)
         return {"message": "Registro exitoso"}
     except Exception as e:
-        print("❌ Error en registro:", e)
         return {"error": str(e)}
 
-# API Login
 @app.post("/api/login")
 async def login(login_username: str = Form(...), login_password: str = Form(...)):
     try:
@@ -128,22 +146,25 @@ async def login(login_username: str = Form(...), login_password: str = Form(...)
             database=DB_NAME
         )
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM usuarios WHERE username=%s AND password=%s", (login_username, login_password))
+        cursor.execute("SELECT id FROM usuarios WHERE username=%s AND password=%s", (login_username, login_password))
         user = cursor.fetchone()
 
         if user:
+            usuario_id = user[0]
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            cursor.execute("UPDATE usuarios SET ultimo_login=%s WHERE username=%s", (timestamp, login_username))
+            cursor.execute("UPDATE usuarios SET ultimo_login=%s WHERE id=%s", (timestamp, usuario_id))
             db.commit()
-            print("🔐 Login:", login_username)
             registrar_evento("Login", f"Inicio de sesión: {login_username}")
+            crear_notificacion(usuario_id)
             cursor.close()
             db.close()
-            return {"message": "Inicio de sesión exitoso"}
+            return {
+                "message": "Inicio de sesión exitoso",
+                "usuario_id": usuario_id
+            }
         else:
             cursor.close()
             db.close()
             return {"error": "Credenciales inválidas"}
     except Exception as e:
-        print("❌ Error en login:", e)
         return {"error": str(e)}
