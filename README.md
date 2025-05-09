@@ -1,74 +1,159 @@
-# Safe Data - Plataforma de Ciberseguridad y Almacenamiento
+Safe Data - Plataforma de Ciberseguridad y Almacenamiento
 
-Este proyecto despliega un entorno completo basado en Docker que integra múltiples servicios orientados a la gestión de almacenamiento, operación de aplicaciones web y análisis de ciberseguridad.
+Safe Data es un entorno completo y modular basado en Docker, diseñado para ofrecer una solución integral en almacenamiento privado, gestión web segura y auditorías de ciberseguridad. Reúne herramientas modernas para administración de sistemas, pruebas de seguridad ofensiva y defensiva, y desarrollo web.
 
-Gracias al uso de contenedores, cada componente del sistema se encuentra aislado, es fácilmente replicable y escalable. Incluye una plataforma cloud privada (Nextcloud), una API desarrollada en FastAPI para gestión de usuarios, formularios y seguridad, un sistema de base de datos relacional (MariaDB), y un panel de administración visual (phpMyAdmin y Portainer).
+Gracias al uso de contenedores Docker, cada componente está aislado, es fácilmente replicable, actualizable y escalable. El sistema combina almacenamiento cloud, gestión web segura, APIs personalizadas y múltiples utilidades orientadas a la formación, pruebas o entornos productivos.
 
-Adicionalmente, incorpora herramientas avanzadas de análisis forense (CyberChef), pruebas de hacking ético (OWASP Juice Shop), escaneo antivirus automatizado (ClamAV) y backups programados, lo que lo convierte en un entorno versátil tanto para producción como para prácticas educativas, auditorías o pruebas en ciberseguridad. Todo ello está centralizado en una arquitectura coherente y controlada mediante un único archivo docker-compose.
+🚀 Características Principales
 
-## 🔧 Servicios Incluidos
+📁 Almacenamiento privado con Nextcloud.
 
-- 📦 **Nextcloud**: Plataforma de almacenamiento en la nube.
-- 🐬 **MariaDB**: Base de datos relacional para usuarios, mensajes y eventos.
-- 🧮 **phpMyAdmin**: Interfaz gráfica para gestionar la base de datos.
-- 🌐 **Frontend Web**: Interfaz en HTML/CSS/JS servida con Apache.
-- ⚙️ **FastAPI**: API REST para login, registro, formularios y eventos.
-- 🧠 **CyberChef**: Herramienta web para análisis forense y decodificación.
-- 🎯 **OWASP Juice Shop**: Aplicación vulnerable para prácticas de hacking ético.
-- 🚀 **Redis**: Cache y soporte de sesión en memoria.
-- 🔁 **Nginx**: Proxy reverso que enruta a la API.
-- 🖥️ **Apache HTTP Server**: Sirve el frontend HTML estático.
-- 🖼️ **Portainer**: Gestión visual avanzada de contenedores Docker.
-- ♻️ **Backup Manager**: Crea copias de seguridad al iniciar el entorno.
-- 🛡️ **ClamAV**: Escaneo antivirus periódico de archivos de Nextcloud.
-- 📊 **Registro de Eventos**: Almacena actividades clave como inicio de sesión..
+🔐 Gestión de usuarios con FastAPI, formularios web y notificaciones.
 
-## 📁 Estructura del Proyecto
+🐬 Base de datos relacional MariaDB, con interfaz gráfica en phpMyAdmin.
 
-```
+🌐 Frontend web estático (HTML/CSS/JS) servido con Apache.
+
+⚖️ Gestión avanzada de contenedores con Portainer.
+
+🧠 Análisis forense con CyberChef.
+
+🎯 Pruebas de hacking ético con OWASP Juice Shop.
+
+🛡️ Escaneo antivirus automático con ClamAV.
+
+♻️ Sistema de backups automáticos programados.
+
+🔀 Gestión de sesiones y rendimiento con Redis y Nginx.
+
+📦 Servicios Incluidos
+
+Servicio
+
+Descripción
+
+Nextcloud
+
+Almacenamiento en la nube privado
+
+MariaDB
+
+Base de datos relacional
+
+phpMyAdmin
+
+Interfaz gráfica para MariaDB
+
+FastAPI
+
+API RESTful: login, registro, contacto, notificaciones
+
+Apache
+
+Servidor para frontend HTML/CSS/JS
+
+Redis
+
+Cache/sesiones
+
+Nginx
+
+Proxy reverso para la API
+
+Portainer
+
+Panel de administración de contenedores
+
+CyberChef
+
+Herramienta para análisis forense
+
+Juice Shop
+
+Aplicación vulnerable para prácticas de seguridad
+
+ClamAV
+
+Escáner antivirus automatizado
+
+Backup Manager
+
+Creador de copias de seguridad comprimidas
+
+📁 Estructura del Proyecto
+
 /docker-safe-data
 │
 ├── backend/              # Backend FastAPI (Python)
 ├── docker/               # Dockerfile y docker-compose.yml
-├── config/               # Directorio para ciertos archivos de configuración
-├── scripts/              # Archivos adicionales (verificar_entorno.sh, database-connection) 
-├── volumes/              # Volúmenes persistentes (db, nextcloud, backups, clamav, portainer)
-├── web/                  # Frontend web en HTML, CSS y JS
+├── config/               # Archivos de configuración
+├── scripts/              # Scripts auxiliares (ej. verificar_entorno.sh)
+├── volumes/              # Datos persistentes (db, nextcloud, clamav, etc.)
+├── web/                  # Sitio web HTML/CSS/JS
 └── README.md             # Este archivo
-```
 
-## 🚀 Despliegue del Entorno
+🔧 Despliegue del Entorno
 
-1. Asegúrate de tener Docker y Docker Compose instalados.
-2. Abre una terminal y navega al directorio `docker-safe-data/docker`.
-3. Ejecuta:
+Instala Docker y Docker Compose.
 
-```bash
+Ve al directorio del entorno:
+
+cd docker-safe-data/docker
+
+Ejecuta:
+
 docker-compose up -d --build
-```
 
-Esto desplegará todos los contenedores definidos, incluyendo base de datos, phpMyAdmin, Nextcloud, FastAPI, Redis, Portainer, Nginx, etc.
+Esto desplegará toda la infraestructura en contenedores.
 
-## 🌐 Acceso a los Servicios
+🌐 Acceso a los Servicios
 
-| Servicio         | URL                          | Puerto |
-|------------------|-------------------------------|--------|
-| Aplicación Web   | http://localhost:9090         | 9090   |
-| phpMyAdmin       | http://localhost:8083         | 8083   |
-| Nextcloud        | http://localhost:8084         | 8084   |
-| OWASP Juice Shop | http://localhost:7001         | 7001   |
-| CyberChef        | http://localhost:7002         | 7002   |
-| Portainer        | https://localhost:9443        | 9443   |
+Servicio
 
-## 🛡️ Base de Datos
+URL
 
-- 👤 Registro e inicio de sesión desde la web.
-- ✉️ Formulario de contacto que almacena los mensajes.
-- 📋 Registro de eventos (login, intentos, etc).
+Puerto
 
-Estructura esperada:
+Web Frontend
 
-```sql
+http://localhost:9090
+
+9090
+
+phpMyAdmin
+
+http://localhost:8083
+
+8083
+
+Nextcloud
+
+http://localhost:8084
+
+8084
+
+Juice Shop
+
+http://localhost:7001
+
+7001
+
+CyberChef
+
+http://localhost:7002
+
+7002
+
+Portainer
+
+https://localhost:9443
+
+9443
+
+🗃️ Base de Datos
+
+Tablas principales:
+
 CREATE TABLE contacto (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(100),
@@ -80,51 +165,75 @@ CREATE TABLE usuarios (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(100),
   email VARCHAR(100),
-  password VARCHAR(100)
+  password VARCHAR(100),
+  ultimo_login DATETIME
 );
 
 CREATE TABLE eventos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   tipo_evento VARCHAR(50),
   usuario VARCHAR(100),
-  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  fecha_hora DATETIME
 );
-```
 
-## 🧠 Funcionalidades de Seguridad y Gestión
+CREATE TABLE notificaciones (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  usuario_id INT,
+  mensaje TEXT,
+  leido BOOLEAN DEFAULT FALSE,
+  fecha DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
-- 🔁 **Backups Automáticos**: Se realiza una copia comprimida diaria de la base de datos y Nextcloud.
-- 🛡️ **Escaneo Antivirus**: ClamAV escanea automáticamente los archivos subidos a Nextcloud cada hora.
-- 🧪 **Análisis Forense con CyberChef**: Disponible para pruebas con cadenas, codificaciones, etc.
-- 🔧 **Gestión Visual**: Portainer permite administrar contenedores, volúmenes, logs y tareas programadas.
+🧠 Funcionalidades Avanzadas
 
-## 🐱‍💻 Ciberseguridad con Kali Linux
+📩 Notificaciones personalizadas tras eventos como registro o login.
 
-Desde Kali Linux se puede interactuar con el entorno para realizar pruebas de ciberseguridad:
+📋 Registro de eventos: login, formularios, actividad de usuarios.
 
-- 🔍 **Análisis de tráfico**: Con herramientas como Wireshark.
-- ⚠️ **Análisis de vulnerabilidades automatizado**: Con herramientas como `nmap`, `nikto`, `OpenVAS`, etc.
-- 🧪 **Forense**: Con Autopsy.
-- 💣 **Exploits**: Uso de Metasploit y scripts personalizados.
-- 🔓 **Cracking de contraseñas**: Herramientas como Hydra o John The Ripper.
-- 🌐 **Escaneo Web**: WPScan, dirb, gobuster, etc.
-- 🚨 **IDS/IPS**: Implementación de Snort o Suricata para detección de intrusos.
-- 🧾 **Auditorías**: Análisis del sistema con Lynis.
+🔀 Backups automáticos de la base de datos y archivos.
 
-## 📦 Variables y Seguridad
+🛡️ Escaneo antivirus periódico (ClamAV sobre Nextcloud).
 
-Las contraseñas y variables sensibles están almacenadas en .env, que no se sube al repositorio (.gitignore lo bloquea).
+⚖️ Panel gráfico de administración con Portainer.
 
-Puedes usar .env.example para clonar el proyecto sin comprometer datos.
+🔍 Pruebas y análisis forense vía CyberChef y herramientas externas.
 
-## 👨‍💻 Contribuir
+🐱‍💻 Ciberseguridad con Kali Linux
 
-1. Haz un fork del repositorio.
-2. Crea una nueva rama (`git checkout -b mi-contribucion`).
-3. Realiza tus cambios y haz commit.
-4. Haz push a tu rama (`git push origin mi-contribucion`).
-5. Abre un Pull Request en GitHub.
+Este entorno permite conectarse desde Kali Linux para pruebas ofensivas:
 
-## 📄 Licencia
+🔎 Análisis de tráfico con Wireshark
 
-Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más información.
+🔐 Enumeración con Nmap, Nikto, Gobuster, etc.
+
+💣 Uso de exploits (Metasploit, CVEs, etc.)
+
+🔍 Análisis forense (Autopsy)
+
+🚨 IDS con Snort o Suricata
+
+🧞 Auditorías con Lynis
+
+🔐 Seguridad y Variables
+
+Las variables sensibles (usuarios, contraseñas) están en .env, que está en .gitignore.
+
+El archivo .env.example permite clonar el entorno sin comprometer datos reales.
+
+👨‍💼 Contribuciones
+
+Haz fork del repo
+
+Crea una rama: git checkout -b mi-cambio
+
+Haz commit: git commit -m "Mi mejora"
+
+Push: git push origin mi-cambio
+
+Abre un Pull Request en GitHub
+
+📄 Licencia
+
+Este proyecto está bajo la Licencia MIT.
+
+Desarrollado con ❤️ por Lucas Parreño y colaboradores.
