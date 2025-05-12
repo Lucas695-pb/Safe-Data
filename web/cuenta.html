@@ -27,6 +27,26 @@
             background-color: #e9f7ef;
             font-weight: bold;
         }
+
+        /* NUEVO */
+        .espaciador {
+            height: 76px; /* Igualar altura */
+        }
+
+        .notificaciones-section {
+            padding-top: 1rem;
+            padding-bottom: 4rem;
+            text-align: center;
+        }
+
+        .notificaciones-section h2 {
+            margin-bottom: 1rem;
+        }
+
+        #notificaciones {
+            max-width: 600px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -50,6 +70,7 @@
             <div id="register-message" class="form-message hidden"></div>
             <div id="login-message" class="form-message hidden"></div>
 
+            <!-- Registro -->
             <div class="account-form">
                 <h2>Registrarse</h2>
                 <form id="register-form">
@@ -67,6 +88,7 @@
                 </form>
             </div>
 
+            <!-- Inicio de sesión -->
             <div class="account-form">
                 <h2>Iniciar sesión</h2>
                 <form id="login-form">
@@ -76,13 +98,17 @@
                     <label for="login-password">Contraseña</label>
                     <input type="password" id="login-password" name="login_password" required>
 
+                    <!-- Espaciador para igualar altura -->
+                    <div class="espaciador"></div>
+
                     <button type="submit">Iniciar sesión</button>
                 </form>
             </div>
         </div>
     </section>
 
-    <section class="container">
+    <!-- Notificaciones centrado -->
+    <section class="notificaciones-section container">
         <h2>Notificaciones</h2>
         <div id="notificaciones"></div>
     </section>
