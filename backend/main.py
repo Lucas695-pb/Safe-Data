@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Form
-from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import mysql.connector
@@ -8,64 +8,18 @@ import os
 from datetime import datetime
 from notificaciones import router as notificaciones_router
 
-# Cargar variables del .env desde la carpeta docker
 dotenv_path = Path(__file__).resolve().parent.parent / "docker" / ".env"
 load_dotenv(dotenv_path=dotenv_path)
 
-# Variables de entorno corregidas (prioridad DB_* y fallback MYSQL_*)
 DB_HOST = os.getenv("DB_HOST", "mysql_server")
 DB_PORT = int(os.getenv("DB_PORT", 3306))
 DB_USER = os.getenv("DB_USER") or os.getenv("MYSQL_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD") or os.getenv("MYSQL_PASSWORD")
 DB_NAME = os.getenv("DB_NAME") or os.getenv("MYSQL_DATABASE")
 
-# Función auxiliar para registrar eventos
-def registrar_evento(evento: str, descripcion: str):
-    try:
-        db = mysql.connector.connect(
-            host=DB_HOST,
-            port=DB_PORT,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME
-        )
-        cursor = db.cursor()
-        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        cursor.execute(
-            "INSERT INTO eventos (evento, descripcion, fecha_hora) VALUES (%s, %s, %s)",
-            (evento, descripcion, timestamp)
-        )
-        db.commit()
-        cursor.close()
-        db.close()
-    except Exception as e:
-        print("❌ Error registrando evento:", e)
-
-# Función auxiliar para crear notificación
-def crear_notificacion(usuario_id: int, mensaje: str = "Tu información se ha guardado con éxito."):
-    try:
-        db = mysql.connector.connect(
-            host=DB_HOST,
-            port=DB_PORT,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME
-        )
-        cursor = db.cursor()
-        cursor.execute(
-            "INSERT INTO notificaciones (usuario_id, mensaje, leido) VALUES (%s, %s, %s)",
-            (usuario_id, mensaje, False)
-        )
-        db.commit()
-        cursor.close()
-        db.close()
-    except Exception as e:
-        print("❌ Error creando notificación:", e)
-
 app = FastAPI()
 app.include_router(notificaciones_router)
 
-# Rutas
 BASE_DIR = Path(__file__).resolve().parent.parent
 WEB_DIR = BASE_DIR / "web"
 
@@ -93,15 +47,44 @@ async def servicios():
 async def cloud():
     return FileResponse(WEB_DIR / "cloud.html")
 
+def registrar_evento(evento: str, descripcion: str):
+    try:
+        db = mysql.connector.connect(
+            host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASSWORD, database=DB_NAME
+        )
+        cursor = db.cursor()
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        cursor.execute(
+            "INSERT INTO eventos (evento, descripcion, fecha_hora) VALUES (%s, %s, %s)",
+            (evento, descripcion, timestamp)
+        )
+        db.commit()
+        cursor.close()
+        db.close()
+    except Exception as e:
+        print("❌ Error registrando evento:", e)
+
+def crear_notificacion(usuario_id: int, mensaje: str = "Tu información se ha guardado con éxito."):
+    try:
+        db = mysql.connector.connect(
+            host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASSWORD, database=DB_NAME
+        )
+        cursor = db.cursor()
+        cursor.execute(
+            "INSERT INTO notificaciones (usuario_id, mensaje, leido) VALUES (%s, %s, %s)",
+            (usuario_id, mensaje, False)
+        )
+        db.commit()
+        cursor.close()
+        db.close()
+    except Exception as e:
+        print("❌ Error creando notificación:", e)
+
 @app.post("/api/contacto")
 async def contacto_post(nombre: str = Form(...), email: str = Form(...), mensaje: str = Form(...)):
     try:
         db = mysql.connector.connect(
-            host=DB_HOST,
-            port=DB_PORT,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME
+            host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASSWORD, database=DB_NAME
         )
         cursor = db.cursor()
         cursor.execute("INSERT INTO contacto (nombre, email, mensaje) VALUES (%s, %s, %s)", (nombre, email, mensaje))
@@ -109,19 +92,15 @@ async def contacto_post(nombre: str = Form(...), email: str = Form(...), mensaje
         cursor.close()
         db.close()
         registrar_evento("Contacto", f"Mensaje de {nombre} ({email})")
-        return {"message": "Mensaje recibido con éxito"}
+        return JSONResponse(content={"message": "Mensaje recibido con éxito"})
     except Exception as e:
-        return {"error": str(e)}
+        return JSONResponse(status_code=500, content={"error": str(e)})
 
 @app.post("/api/register")
 async def register(username: str = Form(...), email: str = Form(...), password: str = Form(...)):
     try:
         db = mysql.connector.connect(
-            host=DB_HOST,
-            port=DB_PORT,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME
+            host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASSWORD, database=DB_NAME
         )
         cursor = db.cursor()
         cursor.execute("INSERT INTO usuarios (username, email, password) VALUES (%s, %s, %s)", (username, email, password))
@@ -131,19 +110,15 @@ async def register(username: str = Form(...), email: str = Form(...), password: 
         db.close()
         registrar_evento("Registro", f"Nuevo usuario registrado: {username}")
         crear_notificacion(usuario_id)
-        return {"message": "Registro exitoso"}
+        return JSONResponse(content={"message": "Registro exitoso"})
     except Exception as e:
-        return {"error": str(e)}
+        return JSONResponse(status_code=500, content={"error": str(e)})
 
 @app.post("/api/login")
 async def login(login_username: str = Form(...), login_password: str = Form(...)):
     try:
         db = mysql.connector.connect(
-            host=DB_HOST,
-            port=DB_PORT,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME
+            host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASSWORD, database=DB_NAME
         )
         cursor = db.cursor()
         cursor.execute("SELECT id FROM usuarios WHERE username=%s AND password=%s", (login_username, login_password))
@@ -158,13 +133,10 @@ async def login(login_username: str = Form(...), login_password: str = Form(...)
             crear_notificacion(usuario_id)
             cursor.close()
             db.close()
-            return {
-                "message": "Inicio de sesión exitoso",
-                "usuario_id": usuario_id
-            }
+            return JSONResponse(content={"message": "Inicio de sesión exitoso", "usuario_id": usuario_id})
         else:
             cursor.close()
             db.close()
-            return {"error": "Credenciales inválidas"}
+            return JSONResponse(status_code=401, content={"error": "Credenciales inválidas"})
     except Exception as e:
-        return {"error": str(e)}
+        return JSONResponse(status_code=500, content={"error": str(e)})

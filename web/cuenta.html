@@ -27,22 +27,17 @@
             background-color: #e9f7ef;
             font-weight: bold;
         }
-
-        /* NUEVO */
         .espaciador {
-            height: 76px; /* Igualar altura */
+            height: 76px;
         }
-
         .notificaciones-section {
             padding-top: 1rem;
             padding-bottom: 4rem;
             text-align: center;
         }
-
         .notificaciones-section h2 {
             margin-bottom: 1rem;
         }
-
         #notificaciones {
             max-width: 600px;
             margin: 0 auto;
@@ -55,11 +50,11 @@
             <h1>SAFE DATA</h1>
             <nav>
                 <ul>
-                    <li><a href="/">INICIO</a></li>
-                    <li><a href="/servicios">SERVICIOS</a></li>
-                    <li><a href="/cloud">CLOUD</a></li>
-                    <li><a href="/contacto">CONTACTO</a></li>
-                    <li><a href="/cuenta">CUENTA</a></li>
+                    <li><a href="index.html">INICIO</a></li>
+                    <li><a href="servicios.html">SERVICIOS</a></li>
+                    <li><a href="cloud.html">CLOUD</a></li>
+                    <li><a href="contacto.html">CONTACTO</a></li>
+                    <li><a href="cuenta.html">CUENTA</a></li>
                 </ul>
             </nav>
         </div>
@@ -70,44 +65,34 @@
             <div id="register-message" class="form-message hidden"></div>
             <div id="login-message" class="form-message hidden"></div>
 
-            <!-- Registro -->
             <div class="account-form">
                 <h2>Registrarse</h2>
                 <form id="register-form">
                     <label for="username">Nombre de usuario</label>
                     <input type="text" id="username" name="username" required>
-
                     <label for="email">Correo electrónico</label>
                     <input type="email" id="email" name="email" required>
-
                     <label for="password">Contraseña</label>
                     <input type="password" id="password" name="password" required>
                     <div id="password-strength"></div>
-
                     <button type="submit">Registrarse</button>
                 </form>
             </div>
 
-            <!-- Inicio de sesión -->
             <div class="account-form">
                 <h2>Iniciar sesión</h2>
                 <form id="login-form">
                     <label for="login-username">Nombre de usuario</label>
                     <input type="text" id="login-username" name="login_username" required>
-
                     <label for="login-password">Contraseña</label>
                     <input type="password" id="login-password" name="login_password" required>
-
-                    <!-- Espaciador para igualar altura -->
                     <div class="espaciador"></div>
-
                     <button type="submit">Iniciar sesión</button>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- Notificaciones centrado -->
     <section class="notificaciones-section container">
         <h2>Notificaciones</h2>
         <div id="notificaciones"></div>
@@ -129,10 +114,16 @@
                 const formData = new FormData(form);
                 const response = await fetch('http://localhost:9090/api/register', {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
                 });
 
-                const result = await response.json();
+                let result;
+                try {
+                    result = await response.json();
+                } catch (jsonError) {
+                    throw new Error("Respuesta del servidor no es JSON válido.");
+                }
 
                 if (response.ok) {
                     message.textContent = 'Registro exitoso!';
@@ -158,10 +149,16 @@
                 const formData = new FormData(form);
                 const response = await fetch('http://localhost:9090/api/login', {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
                 });
 
-                const result = await response.json();
+                let result;
+                try {
+                    result = await response.json();
+                } catch (jsonError) {
+                    throw new Error("Respuesta del servidor no es JSON válido.");
+                }
 
                 if (response.ok) {
                     message.textContent = 'Inicio de sesión exitoso!';
@@ -170,7 +167,9 @@
 
                     const usuarioId = result.usuario_id;
 
-                    fetch(`http://localhost:9090/api/notificaciones/${usuarioId}`)
+                    fetch(`http://localhost:9090/api/notificaciones/${usuarioId}`, {
+                        headers: { 'Accept': 'application/json' }
+                    })
                         .then(res => res.json())
                         .then(data => {
                             const contenedor = document.getElementById("notificaciones");
