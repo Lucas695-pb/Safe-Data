@@ -8,22 +8,22 @@ Adicionalmente, incorpora herramientas avanzadas de análisis forense (CyberChef
 
 ## 🔧 Servicios Incluidos
 
-- 📦 **Nextcloud**: Plataforma de almacenamiento en la nube.
-- 🐬 **MariaDB**: Base de datos relacional para usuarios, mensajes y eventos.
-- 🧮 **phpMyAdmin**: Interfaz gráfica para gestionar la base de datos.
-- 🌐 **Frontend Web**: Interfaz en HTML/CSS/JS servida con Apache.
-- ⚙️ **FastAPI**: API REST para login, registro, formularios y eventos.
-- 🧠 **CyberChef**: Herramienta web para análisis forense y decodificación.
-- 🎯 **OWASP Juice Shop**: Aplicación vulnerable para prácticas de hacking ético.
-- 🚀 **Redis**: Cache y soporte de sesión en memoria.
-- 🔁 **Nginx**: Proxy reverso que enruta a la API.
-- 🖥️ **Apache HTTP Server**: Sirve el frontend HTML estático.
-- 🖼️ **Portainer**: Gestión visual avanzada de contenedores Docker.
-- ♻️ **Backup Manager**: Crea copias de seguridad al iniciar el entorno.
-- 🛡️ **ClamAV**: Escaneo antivirus periódico de archivos de Nextcloud.
-- 📊 **Registro de Eventos**: Almacena actividades clave como inicio de sesión..
+-  **Nextcloud**: Plataforma de almacenamiento en la nube.
+-  **MariaDB**: Base de datos relacional para usuarios, mensajes y eventos.
+-  **phpMyAdmin**: Interfaz gráfica para gestionar la base de datos.
+-  **Frontend Web**: Interfaz en HTML/CSS/JS servida con Apache.
+-  **FastAPI**: API REST para login, registro, formularios y eventos.
+-  **CyberChef**: Herramienta web para análisis forense y decodificación.
+-  **OWASP Juice Shop**: Aplicación vulnerable para prácticas de hacking ético.
+-  **Redis**: Cache y soporte de sesión en memoria.
+-  **Nginx**: Proxy reverso que enruta a la API.
+-  **Apache HTTP Server**: Sirve el frontend HTML estático.
+-  **Portainer**: Gestión visual avanzada de contenedores Docker.
+-  **Backup Manager**: Crea copias de seguridad al iniciar el entorno.
+-  **ClamAV**: Escaneo antivirus periódico de archivos de Nextcloud.
+-  **Registro de Eventos**: Almacena actividades clave como inicio de sesión..
 
-## 📁 Estructura del Proyecto
+##  Estructura del Proyecto
 
 ```
 /docker-safe-data
@@ -37,7 +37,7 @@ Adicionalmente, incorpora herramientas avanzadas de análisis forense (CyberChef
 └── README.md             # Este archivo
 ```
 
-## 🚀 Despliegue del Entorno
+##  Despliegue del Entorno
 
 1. Asegúrate de tener Docker y Docker Compose instalados.
 2. Abre una terminal y navega al directorio `docker-safe-data/docker`.
@@ -49,7 +49,7 @@ docker-compose up -d --build
 
 Esto desplegará todos los contenedores definidos, incluyendo base de datos, phpMyAdmin, Nextcloud, FastAPI, Redis, Portainer, Nginx, etc.
 
-## 🌐 Acceso a los Servicios
+##  Acceso a los Servicios
 
 | Servicio         | URL                          | Puerto |
 |------------------|-------------------------------|--------|
@@ -60,11 +60,11 @@ Esto desplegará todos los contenedores definidos, incluyendo base de datos, php
 | CyberChef        | http://localhost:7002         | 7002   |
 | Portainer        | https://localhost:9443        | 9443   |
 
-## 🛡️ Base de Datos
+##  Base de Datos
 
-- 👤 Registro e inicio de sesión desde la web.
-- ✉️ Formulario de contacto que almacena los mensajes.
-- 📋 Registro de eventos (login, intentos, etc).
+-  Registro e inicio de sesión desde la web.
+-  Formulario de contacto que almacena los mensajes.
+-  Registro de eventos (login, intentos, etc).
 
 Estructura esperada:
 
@@ -91,33 +91,33 @@ CREATE TABLE eventos (
 );
 ```
 
-## 🧠 Funcionalidades de Seguridad y Gestión
+##  Funcionalidades de Seguridad y Gestión
 
-- 🔁 **Backups Automáticos**: Se realiza una copia comprimida diaria de la base de datos y Nextcloud.
-- 🛡️ **Escaneo Antivirus**: ClamAV escanea automáticamente los archivos subidos a Nextcloud cada hora.
-- 🧪 **Análisis Forense con CyberChef**: Disponible para pruebas con cadenas, codificaciones, etc.
-- 🔧 **Gestión Visual**: Portainer permite administrar contenedores, volúmenes, logs y tareas programadas.
+-  **Backups Automáticos**: Se realiza una copia comprimida diaria de la base de datos y Nextcloud.
+-  **Escaneo Antivirus**: ClamAV escanea automáticamente los archivos subidos a Nextcloud cada hora.
+-  **Análisis Forense con CyberChef**: Disponible para pruebas con cadenas, codificaciones, etc.
+-  **Gestión Visual**: Portainer permite administrar contenedores, volúmenes, logs y tareas programadas.
 
-## 🐱‍💻 Ciberseguridad con Kali Linux
+##  Ciberseguridad con Kali Linux
 
 Desde Kali Linux se puede interactuar con el entorno para realizar pruebas de ciberseguridad:
 
-- 🔍 **Análisis de tráfico**: Con herramientas como Wireshark.
-- ⚠️ **Análisis de vulnerabilidades automatizado**: Con herramientas como `nmap`, `nikto`, `OpenVAS`, etc.
-- 🧪 **Forense**: Con Autopsy.
-- 💣 **Exploits**: Uso de Metasploit y scripts personalizados.
-- 🔓 **Cracking de contraseñas**: Herramientas como Hydra o John The Ripper.
-- 🌐 **Escaneo Web**: WPScan, dirb, gobuster, etc.
-- 🚨 **IDS/IPS**: Implementación de Snort o Suricata para detección de intrusos.
-- 🧾 **Auditorías**: Análisis del sistema con Lynis.
+-  **Análisis de tráfico**: Con herramientas como Wireshark.
+-  **Análisis de vulnerabilidades automatizado**: Con herramientas como `nmap`, `nikto`, `OpenVAS`, etc.
+-  **Forense**: Con Autopsy.
+-  **Exploits**: Uso de Metasploit y scripts personalizados.
+-  **Cracking de contraseñas**: Herramientas como Hydra o John The Ripper.
+-  **Escaneo Web**: WPScan, dirb, gobuster, etc.
+-  **IDS/IPS**: Implementación de Snort o Suricata para detección de intrusos.
+-  **Auditorías**: Análisis del sistema con Lynis.
 
-## 📦 Variables y Seguridad
+##  Variables y Seguridad
 
 Las contraseñas y variables sensibles están almacenadas en .env, que no se sube al repositorio (.gitignore lo bloquea).
 
 Puedes usar .env.example para clonar el proyecto sin comprometer datos.
 
-## 👨‍💻 Contribuir
+##  Contribuir
 
 1. Haz un fork del repositorio.
 2. Crea una nueva rama (`git checkout -b mi-contribucion`).
@@ -125,6 +125,6 @@ Puedes usar .env.example para clonar el proyecto sin comprometer datos.
 4. Haz push a tu rama (`git push origin mi-contribucion`).
 5. Abre un Pull Request en GitHub.
 
-## 📄 Licencia
+##  Licencia
 
 Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más información.+
